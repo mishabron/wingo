@@ -1,23 +1,18 @@
 package com.mbronshteyn.wingo.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
-import android.app.ActivityOptions;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 
 import com.mbronshteyn.wingo.R;
 
@@ -30,6 +25,7 @@ public class GameActivity extends AppCompatActivity {
     private Button chipButton50;
     private Button chipButton100;
     private ChipBlinkedEvent chipBlinkedEvent;
+    private Button spinButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +35,16 @@ public class GameActivity extends AppCompatActivity {
         chipButton25 = (Button) findViewById(R.id.btn_chip25);
         chipButton50 = (Button) findViewById(R.id.btn_chip50);
         chipButton100 = (Button) findViewById(R.id.btn_chip100);
-        
+
+        spinButton = (Button) findViewById(R.id.spinButton);
+        spinButton.setEnabled(false);
+        spinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinButton.setEnabled(false);
+            }
+        });
+
         scaleUi();
     }
 
@@ -69,10 +74,47 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe
+    public void onChipStpedAnimationEnds(String event){
+        if(event.equals(END_OD_ANIMATION)){
+            RadioGroup chips = (RadioGroup) findViewById(R.id.radioGroup1);
+            chips.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    spinButton.setEnabled(true);
+                    if (checkedId == R.id.btn_chip100){
+                        ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
+                        win1000000.setVisibility(View.VISIBLE);
+                        ImageView win500000 = (ImageView) findViewById(R.id.win500000);
+                        win500000.setVisibility(View.INVISIBLE);
+                        ImageView win250000 = (ImageView) findViewById(R.id.win250000);
+                        win250000.setVisibility(View.INVISIBLE);
+                    }
+                    else if(checkedId == R.id.btn_chip50){
+                        ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
+                        win1000000.setVisibility(View.INVISIBLE);
+                        ImageView win500000 = (ImageView) findViewById(R.id.win500000);
+                        win500000.setVisibility(View.VISIBLE);
+                        ImageView win250000 = (ImageView) findViewById(R.id.win250000);
+                        win250000.setVisibility(View.INVISIBLE);
+                    }
+                    else if(checkedId == R.id.btn_chip25){
+                        ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
+                        win1000000.setVisibility(View.INVISIBLE);
+                        ImageView win500000 = (ImageView) findViewById(R.id.win500000);
+                        win500000.setVisibility(View.INVISIBLE);
+                        ImageView win250000 = (ImageView) findViewById(R.id.win250000);
+                        win250000.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        chipBlinkedEvent = new ChipBlinkedEvent(chipButton100,200,600);
+        chipBlinkedEvent = new ChipBlinkedEvent(chipButton100,100,400);
         EventBus.getDefault().post(chipBlinkedEvent);
     }
 
@@ -111,6 +153,7 @@ public class GameActivity extends AppCompatActivity {
             chipButton100.setPressed(false);
             chipButton50.setPressed(false);
             chipButton25.setPressed(false);
+            EventBus.getDefault().post(END_OD_ANIMATION);
         }, 500);
     }
 
@@ -163,6 +206,30 @@ public class GameActivity extends AppCompatActivity {
         ViewGroup.LayoutParams buttonParamsChip100 = buttonChip100.getLayoutParams();
         buttonParamsChip100.height = buttonParamsChip25.height;;
         buttonParamsChip100.width = buttonParamsChip25.width;;
+
+        ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
+        ViewGroup.LayoutParams win1000000Params = win1000000.getLayoutParams();
+        win1000000Params.height = (int) (newBmapHeight * 0.0299F);
+        win1000000Params.width = (int) (newBmapHeight * 0.1906F);;
+
+        ImageView win500000 = (ImageView) findViewById(R.id.win500000);
+        ViewGroup.LayoutParams win500000Params = win500000.getLayoutParams();
+        win500000Params.height = win1000000Params.height;
+        win500000Params.width = win1000000Params.width;;
+
+        ImageView win250000 = (ImageView) findViewById(R.id.win250000);
+        ViewGroup.LayoutParams win250000Params = win250000.getLayoutParams();
+        win250000Params.height = win1000000Params.height;
+        win250000Params.width = win1000000Params.width;;
+
+        //scale spin  button
+        Button spinButton = (Button) findViewById(R.id.spinButton);
+        int buttonHeight = (int) (newBmapHeight * 0.2316F);
+        int buttonWidth = (int) (newBmapWidth * 0.1297F);
+        ViewGroup.LayoutParams buttonSpinParams = spinButton.getLayoutParams();
+        buttonSpinParams.height = buttonHeight;
+        buttonSpinParams.width = buttonWidth;
+
     }
 
     private class ChipBlinkedEvent {
@@ -177,5 +244,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private static final String END_OD_BLINKIG = "the end";
+    private static final String END_OD_BLINKIG = "the end of bliking";
+
+    private static final String END_OD_ANIMATION = "the end of animation";
 }
