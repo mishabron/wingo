@@ -1,15 +1,22 @@
 package com.mbronshteyn.wingo.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -35,13 +42,53 @@ public class GameActivity extends AppCompatActivity {
         chipButton25 = (Button) findViewById(R.id.btn_chip25);
         chipButton50 = (Button) findViewById(R.id.btn_chip50);
         chipButton100 = (Button) findViewById(R.id.btn_chip100);
-
         spinButton = (Button) findViewById(R.id.spinButton);
         spinButton.setEnabled(false);
         spinButton.setOnClickListener(new View.OnClickListener() {
+            Button buttonHome = (Button) findViewById(R.id.homeButton);
             @Override
             public void onClick(View v) {
-                spinButton.setEnabled(false);
+                Animation aniRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.ring_animation);
+                aniRotate.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        buttonHome.setEnabled(false);
+                        spinButton.setEnabled(false);
+                        chipButton25.setClickable(false);
+                        chipButton100.setClickable(false);
+                        chipButton50.setClickable(false);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        buttonHome.setEnabled(true);
+                        spinButton.setEnabled(true);
+                        ImageView spingring = (ImageView) findViewById(R.id.spingring);
+                        spingring.setVisibility(View.INVISIBLE);
+                        chipButton25.setClickable(true);
+                        chipButton100.setClickable(true);
+                        chipButton50.setClickable(true);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                ImageView spingring = (ImageView) findViewById(R.id.spingring);
+                spingring.setVisibility(View.VISIBLE);
+                spingring.startAnimation(aniRotate);
+            }
+        });
+
+        Button homeButton = (Button) findViewById(R.id.homeButton);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), GameSelectorActivity.class);
+                intent.putExtras(new Bundle());
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GameActivity.this);
+                startActivity(intent, options.toBundle());
             }
         });
 
@@ -82,6 +129,7 @@ public class GameActivity extends AppCompatActivity {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     spinButton.setEnabled(true);
+                    spinButton.setPressed(false);
                     if (checkedId == R.id.btn_chip100){
                         ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
                         win1000000.setVisibility(View.VISIBLE);
@@ -114,6 +162,8 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        RadioGroup chips = (RadioGroup) findViewById(R.id.radioGroup1);
+        chips.clearCheck();
         chipBlinkedEvent = new ChipBlinkedEvent(chipButton100,100,400);
         EventBus.getDefault().post(chipBlinkedEvent);
     }
@@ -224,11 +274,21 @@ public class GameActivity extends AppCompatActivity {
 
         //scale spin  button
         Button spinButton = (Button) findViewById(R.id.spinButton);
-        int buttonHeight = (int) (newBmapHeight * 0.2316F);
-        int buttonWidth = (int) (newBmapWidth * 0.1297F);
+        int buttonHeight = (int) (newBmapHeight * 0.2407F);
+        int buttonWidth = (int) (newBmapWidth * 0.1307F);
         ViewGroup.LayoutParams buttonSpinParams = spinButton.getLayoutParams();
         buttonSpinParams.height = buttonHeight;
         buttonSpinParams.width = buttonWidth;
+
+        ImageView spingring = (ImageView) findViewById(R.id.spingring);
+        ViewGroup.LayoutParams spingringarams = spingring.getLayoutParams();
+        spingringarams.height = buttonSpinParams.height;
+        spingringarams.width = buttonSpinParams.width;;
+
+        Button buttonHome = (Button) findViewById(R.id.homeButton);
+        ViewGroup.LayoutParams buttonParmHome = buttonHome.getLayoutParams();
+        buttonParmHome.height = (int) (newBmapHeight * 0.09259F);;
+        buttonParmHome.width = (int) (newBmapWidth * 0.04024F);;
 
     }
 
