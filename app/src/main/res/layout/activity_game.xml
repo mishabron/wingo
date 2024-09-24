@@ -10,6 +10,16 @@
     tools:context=".activity.GameActivity">
 
     <ImageView
+        android:id="@+id/mainCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/maincircle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
         android:id="@+id/gameBacgroundimageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,14 +82,10 @@
         android:id="@+id/win1000000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/win1000000"
+        android:src="@drawable/win100000"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.18"
-        app:layout_constraintHorizontal_bias="0.1683"/>
+        app:layout_constraintEnd_toEndOf="@id/win250000"
+        app:layout_constraintTop_toTopOf="@id/win250000"/>
 
     <ImageView
         android:id="@+id/win500000"
@@ -87,25 +93,21 @@
         android:layout_height="wrap_content"
         android:src="@drawable/win500000"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.18"
-        app:layout_constraintHorizontal_bias="0.1683"/>
+        app:layout_constraintEnd_toEndOf="@id/win250000"
+        app:layout_constraintTop_toTopOf="@id/win250000"/>
 
     <ImageView
         android:id="@+id/win250000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/win2500000"
+        android:src="@drawable/win250000"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.18"
-        app:layout_constraintHorizontal_bias="0.1683"/>
+        app:layout_constraintHorizontal_bias="0.12"/>
 
     <Button
         android:id="@+id/spinButton"
@@ -142,5 +144,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/winBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/winbackground"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="2dp"/>
+
+    <ImageView
+        android:id="@+id/numbers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/startx"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

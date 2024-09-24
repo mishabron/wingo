@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +27,8 @@ import com.mbronshteyn.wingo.R;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class GameActivity extends AppCompatActivity {
 
     private Button chipButton25;
@@ -33,6 +36,8 @@ public class GameActivity extends AppCompatActivity {
     private Button chipButton100;
     private ChipBlinkedEvent chipBlinkedEvent;
     private Button spinButton;
+    private int previous =6;
+    private int randomNum = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,14 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Animation aniRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.ring_animation);
+                ImageView numbers = (ImageView) findViewById(R.id.numbers);
+                numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
+                AnimationDrawable frameAnimation = (AnimationDrawable) numbers.getBackground();
+                ImageView mainCircle = (ImageView) findViewById(R.id.mainCircle);
+                Animation mainCircleRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.maincircle_animation);
+                ImageView winBackground = (ImageView) findViewById(R.id.winBackground);
+                winBackground.setVisibility(View.INVISIBLE);
+                mainCircle.setBackground(getResources().getDrawable(R.drawable.maincircle,null));
                 aniRotate.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -57,6 +70,7 @@ public class GameActivity extends AppCompatActivity {
                         chipButton25.setClickable(false);
                         chipButton100.setClickable(false);
                         chipButton50.setClickable(false);
+                        frameAnimation.start();
                     }
 
                     @Override
@@ -68,16 +82,35 @@ public class GameActivity extends AppCompatActivity {
                         chipButton25.setClickable(true);
                         chipButton100.setClickable(true);
                         chipButton50.setClickable(true);
-                    }
+                        frameAnimation.stop();
 
+                        while (randomNum == previous){
+                            randomNum = ThreadLocalRandom.current().nextInt(0, 5 + 1);
+                        }
+                        previous = randomNum;
+                        Drawable frame = frameAnimation.getFrame(randomNum);
+                        if(!frameAnimation.getCurrent().equals(frame)) {
+                            numbers.setBackground(frame);
+                        }
+                        mainCircleRotate.setDuration(15000);
+                        mainCircle.startAnimation(mainCircleRotate);
+                        if(randomNum == 5){
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                winBackground.setVisibility(View.VISIBLE);
+                                mainCircle.setBackground(getResources().getDrawable(R.drawable.wincircle,null));
+                            }, 1000);
+                        }
+                    }
                     @Override
                     public void onAnimationRepeat(Animation animation) {
-
                     }
                 });
                 ImageView spingring = (ImageView) findViewById(R.id.spingring);
                 spingring.setVisibility(View.VISIBLE);
                 spingring.startAnimation(aniRotate);
+
+                mainCircleRotate.setDuration(3000);
+                mainCircle.startAnimation(mainCircleRotate);
             }
         });
 
@@ -98,7 +131,14 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        chipButton25.setClickable(false);
+        chipButton100.setClickable(false);
+        chipButton50.setClickable(false);
         EventBus.getDefault().register(this);
+
+        Animation mainCircleRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.maincircle_animation);
+        ImageView mainCircle = (ImageView) findViewById(R.id.mainCircle);
+        mainCircle.startAnimation(mainCircleRotate);
     }
 
     @Subscribe
@@ -125,6 +165,9 @@ public class GameActivity extends AppCompatActivity {
     public void onChipStpedAnimationEnds(String event){
         if(event.equals(END_OD_ANIMATION)){
             RadioGroup chips = (RadioGroup) findViewById(R.id.radioGroup1);
+            chipButton25.setClickable(true);
+            chipButton100.setClickable(true);
+            chipButton50.setClickable(true);
             chips.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -260,7 +303,7 @@ public class GameActivity extends AppCompatActivity {
         ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
         ViewGroup.LayoutParams win1000000Params = win1000000.getLayoutParams();
         win1000000Params.height = (int) (newBmapHeight * 0.0299F);
-        win1000000Params.width = (int) (newBmapHeight * 0.1906F);;
+        win1000000Params.width = (int) (newBmapWidth * 0.1906F);;
 
         ImageView win500000 = (ImageView) findViewById(R.id.win500000);
         ViewGroup.LayoutParams win500000Params = win500000.getLayoutParams();
@@ -283,13 +326,27 @@ public class GameActivity extends AppCompatActivity {
         ImageView spingring = (ImageView) findViewById(R.id.spingring);
         ViewGroup.LayoutParams spingringarams = spingring.getLayoutParams();
         spingringarams.height = buttonSpinParams.height;
-        spingringarams.width = buttonSpinParams.width;;
+        spingringarams.width = buttonSpinParams.width;
 
         Button buttonHome = (Button) findViewById(R.id.homeButton);
         ViewGroup.LayoutParams buttonParmHome = buttonHome.getLayoutParams();
-        buttonParmHome.height = (int) (newBmapHeight * 0.09259F);;
-        buttonParmHome.width = (int) (newBmapWidth * 0.04024F);;
+        buttonParmHome.height = (int) (newBmapHeight * 0.09259F);
+        buttonParmHome.width = (int) (newBmapWidth * 0.04024F);
 
+        ImageView numbers = (ImageView) findViewById(R.id.numbers);
+        ViewGroup.LayoutParams numbersParams = numbers.getLayoutParams();
+        numbersParams.height = (int) (newBmapHeight * 0.1666F);
+        numbersParams.width = (int) (newBmapWidth * 0.0905F);
+
+        ImageView mainCircle = (ImageView) findViewById(R.id.mainCircle);
+        ViewGroup.LayoutParams mainCircleParams = mainCircle.getLayoutParams();
+        mainCircleParams.height = (int) (newBmapHeight * 0.5410F);
+        mainCircleParams.width = (int) (newBmapWidth * 0.2937F);
+
+        ImageView winBackground = (ImageView) findViewById(R.id.winBackground);
+        ViewGroup.LayoutParams winBackgroundParams = winBackground.getLayoutParams();
+        winBackgroundParams.height = (int) (newBmapHeight * 0.8333);
+        winBackgroundParams.width = (int) (newBmapWidth * 0.4325F);
     }
 
     private class ChipBlinkedEvent {
