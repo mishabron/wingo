@@ -49,19 +49,24 @@ public class GameActivity extends AppCompatActivity {
         chipButton100 = (Button) findViewById(R.id.btn_chip100);
         spinButton = (Button) findViewById(R.id.spinButton);
         spinButton.setEnabled(false);
+
+        ImageView numbers = (ImageView) findViewById(R.id.numbers);
+        numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
+        AnimationDrawable numbersAnimation = (AnimationDrawable) numbers.getBackground();
+        ImageView winner = (ImageView) findViewById(R.id.winnerBanner);
+        AnimationDrawable winnerAnimation = (AnimationDrawable) winner.getBackground();
         spinButton.setOnClickListener(new View.OnClickListener() {
             Button buttonHome = (Button) findViewById(R.id.homeButton);
             @Override
             public void onClick(View v) {
+
                 Animation aniRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.ring_animation);
-                ImageView numbers = (ImageView) findViewById(R.id.numbers);
-                numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
-                AnimationDrawable frameAnimation = (AnimationDrawable) numbers.getBackground();
                 ImageView mainCircle = (ImageView) findViewById(R.id.mainCircle);
                 Animation mainCircleRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.maincircle_animation);
                 ImageView winBackground = (ImageView) findViewById(R.id.winBackground);
                 winBackground.setVisibility(View.INVISIBLE);
-                mainCircle.setBackground(getResources().getDrawable(R.drawable.maincircle,null));
+                ImageView winCircle = (ImageView) findViewById(R.id.winCircle);
+                winCircle.setVisibility(View.INVISIBLE);
                 aniRotate.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -70,35 +75,41 @@ public class GameActivity extends AppCompatActivity {
                         chipButton25.setClickable(false);
                         chipButton100.setClickable(false);
                         chipButton50.setClickable(false);
-                        frameAnimation.start();
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            numbersAnimation.start();
+                        }, 1000);
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         buttonHome.setEnabled(true);
-                        spinButton.setEnabled(true);
                         ImageView spingring = (ImageView) findViewById(R.id.spingring);
                         spingring.setVisibility(View.INVISIBLE);
                         chipButton25.setClickable(true);
                         chipButton100.setClickable(true);
                         chipButton50.setClickable(true);
-                        frameAnimation.stop();
+                        numbersAnimation.stop();
 
                         while (randomNum == previous){
                             randomNum = ThreadLocalRandom.current().nextInt(0, 5 + 1);
                         }
                         previous = randomNum;
-                        Drawable frame = frameAnimation.getFrame(randomNum);
-                        if(!frameAnimation.getCurrent().equals(frame)) {
-                            numbers.setBackground(frame);
-                        }
+                        numbersAnimation.selectDrawable(randomNum);
+
                         mainCircleRotate.setDuration(15000);
                         mainCircle.startAnimation(mainCircleRotate);
                         if(randomNum == 5){
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 winBackground.setVisibility(View.VISIBLE);
-                                mainCircle.setBackground(getResources().getDrawable(R.drawable.wincircle,null));
-                            }, 1000);
+                                winCircle.setVisibility(View.VISIBLE);
+                                winCircle.startAnimation(mainCircleRotate);
+                                spinButton.setEnabled(true);
+                                winner.setVisibility(View.VISIBLE);
+                                winnerAnimation.start();
+                            }, 2000);
+                        }
+                        else{
+                            spinButton.setEnabled(true);
                         }
                     }
                     @Override
@@ -109,8 +120,11 @@ public class GameActivity extends AppCompatActivity {
                 spingring.setVisibility(View.VISIBLE);
                 spingring.startAnimation(aniRotate);
 
-                mainCircleRotate.setDuration(3000);
+                winCircle.clearAnimation();
+                mainCircleRotate.setDuration(2000);
                 mainCircle.startAnimation(mainCircleRotate);
+                winnerAnimation.stop();
+                winner.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -139,6 +153,13 @@ public class GameActivity extends AppCompatActivity {
         Animation mainCircleRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.maincircle_animation);
         ImageView mainCircle = (ImageView) findViewById(R.id.mainCircle);
         mainCircle.startAnimation(mainCircleRotate);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ImageView mainCircle = (ImageView) findViewById(R.id.mainCircle);
+        mainCircle.clearAnimation();
     }
 
     @Subscribe
@@ -343,10 +364,16 @@ public class GameActivity extends AppCompatActivity {
         mainCircleParams.height = (int) (newBmapHeight * 0.5410F);
         mainCircleParams.width = (int) (newBmapWidth * 0.2937F);
 
+
+        ImageView winCircle = (ImageView) findViewById(R.id.winCircle);
+        ViewGroup.LayoutParams winCircleParams = winCircle.getLayoutParams();
+        winCircleParams.height = (int) (newBmapHeight * 0.5410F);
+        winCircleParams.width = (int) (newBmapWidth * 0.2937F);
+
         ImageView winBackground = (ImageView) findViewById(R.id.winBackground);
         ViewGroup.LayoutParams winBackgroundParams = winBackground.getLayoutParams();
-        winBackgroundParams.height = (int) (newBmapHeight * 0.8333);
-        winBackgroundParams.width = (int) (newBmapWidth * 0.4325F);
+        winBackgroundParams.height = (int) (newBmapHeight * 0.8370F);
+        winBackgroundParams.width = (int) (newBmapWidth * 0.4396F);
     }
 
     private class ChipBlinkedEvent {

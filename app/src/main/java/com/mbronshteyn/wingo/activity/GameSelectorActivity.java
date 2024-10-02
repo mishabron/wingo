@@ -1,17 +1,19 @@
 package com.mbronshteyn.wingo.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.transition.ChangeBounds;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityOptionsCompat;
 
 import com.mbronshteyn.wingo.R;
 
@@ -23,14 +25,14 @@ public class GameSelectorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_selector);
 
         Button button6 = (Button) findViewById(R.id.button1_6);
-        
+
+        GameSelectorActivity activity = this;
         button6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), GameActivity.class);
-                intent.putExtras(new Bundle());
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(GameSelectorActivity.this);
-                startActivity(intent, options.toBundle());
+                Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(activity, R.anim.fade_in, R.anim.fade_out).toBundle();
+                startActivity(intent, bundle);
             }
         });
 

@@ -41,14 +41,21 @@
         app:layout_constraintGuide_percent="0.853"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintGuide_percent="0.163"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <RadioGroup
         android:id="@+id/radioGroup1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/rightGuideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.335">
+        app:layout_constraintTop_toTopOf="@+id/topGuideline">
 
         <RadioButton
             android:id="@+id/btn_chip100"
@@ -64,7 +71,7 @@
             android:layout_height="wrap_content"
             android:button="@android:color/transparent"
             android:background="@drawable/btn_chip_50"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="20.5sp"
             android:checked="false"/>
 
         <RadioButton
@@ -73,7 +80,7 @@
             android:layout_height="wrap_content"
             android:button="@android:color/transparent"
             android:background="@drawable/btn_chip_25"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="21.5sp"
             android:checked="false"/>
 
     </RadioGroup>
@@ -154,14 +161,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="12dp"
-        android:layout_marginLeft="2dp"/>
+        android:layout_marginBottom="12dp"/>
 
     <ImageView
         android:id="@+id/numbers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/startx"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/winCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/wincircle"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/winnerBanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/winner_animation"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
