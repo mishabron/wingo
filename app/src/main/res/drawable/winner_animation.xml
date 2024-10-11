@@ -4,6 +4,9 @@
     android:fillAfter="true">
 
     <item
+        android:drawable="@drawable/winnerbox"
+        android:duration="250"/>
+    <item
         android:drawable="@drawable/w"
         android:duration="250"/>
     <item

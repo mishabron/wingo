@@ -51,8 +51,6 @@ public class GameActivity extends AppCompatActivity {
         spinButton.setEnabled(false);
 
         ImageView numbers = (ImageView) findViewById(R.id.numbers);
-        numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
-        AnimationDrawable numbersAnimation = (AnimationDrawable) numbers.getBackground();
         ImageView winner = (ImageView) findViewById(R.id.winnerBanner);
         AnimationDrawable winnerAnimation = (AnimationDrawable) winner.getBackground();
         spinButton.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +58,8 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
+                AnimationDrawable numbersAnimation = (AnimationDrawable) numbers.getBackground();
                 Animation aniRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.ring_animation);
                 ImageView mainCircle = (ImageView) findViewById(R.id.mainCircle);
                 Animation mainCircleRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.maincircle_animation);
@@ -75,29 +75,27 @@ public class GameActivity extends AppCompatActivity {
                         chipButton25.setClickable(false);
                         chipButton100.setClickable(false);
                         chipButton50.setClickable(false);
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            numbersAnimation.start();
-                        }, 1000);
+                        numbersAnimation.start();
                     }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
+                        numbersAnimation.stop();
+                        while (randomNum == previous) {
+                            randomNum = ThreadLocalRandom.current().nextInt(0, 5 + 1);
+                        }
+                        previous = randomNum;
+                        numbersAnimation.selectDrawable(randomNum);
                         buttonHome.setEnabled(true);
                         ImageView spingring = (ImageView) findViewById(R.id.spingring);
                         spingring.setVisibility(View.INVISIBLE);
                         chipButton25.setClickable(true);
                         chipButton100.setClickable(true);
                         chipButton50.setClickable(true);
-                        numbersAnimation.stop();
-
-                        while (randomNum == previous){
-                            randomNum = ThreadLocalRandom.current().nextInt(0, 5 + 1);
-                        }
-                        previous = randomNum;
-                        numbersAnimation.selectDrawable(randomNum);
-
-                        mainCircleRotate.setDuration(15000);
-                        mainCircle.startAnimation(mainCircleRotate);
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            mainCircleRotate.setDuration(15000);
+                            mainCircle.startAnimation(mainCircleRotate);
+                        }, 1000);
                         if(randomNum == 5){
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 winBackground.setVisibility(View.VISIBLE);
