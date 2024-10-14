@@ -63,8 +63,17 @@ public class GameActivity extends AppCompatActivity {
                 Animation aniRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.ring_animation);
                 ImageView mainCircle = (ImageView) findViewById(R.id.mainCircle);
                 Animation mainCircleRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.maincircle_animation);
+
                 ImageView winBackground = (ImageView) findViewById(R.id.winBackground);
+                if(winBackground.getVisibility() == View.VISIBLE) {
+                    Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
+                    winBackground.setVisibility(View.GONE);
+                    animFadeOut.reset();
+                    winBackground.clearAnimation();
+                    winBackground.startAnimation(animFadeOut);
+                }
                 winBackground.setVisibility(View.INVISIBLE);
+
                 ImageView winCircle = (ImageView) findViewById(R.id.winCircle);
                 winCircle.setVisibility(View.INVISIBLE);
                 aniRotate.setAnimationListener(new Animation.AnimationListener() {
@@ -92,10 +101,7 @@ public class GameActivity extends AppCompatActivity {
                         chipButton25.setClickable(true);
                         chipButton100.setClickable(true);
                         chipButton50.setClickable(true);
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            mainCircleRotate.setDuration(15000);
-                            mainCircle.startAnimation(mainCircleRotate);
-                        }, 1000);
+                        mainCircleRotate.setDuration(15000);
                         if(randomNum == 5){
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 winBackground.setVisibility(View.VISIBLE);
@@ -107,6 +113,9 @@ public class GameActivity extends AppCompatActivity {
                             }, 1);
                         }
                         else{
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                mainCircle.startAnimation(mainCircleRotate);
+                            }, 1000);
                             spinButton.setEnabled(true);
                         }
                     }
