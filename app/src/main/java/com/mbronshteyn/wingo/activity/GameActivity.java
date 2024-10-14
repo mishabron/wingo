@@ -104,7 +104,7 @@ public class GameActivity extends AppCompatActivity {
                                 spinButton.setEnabled(true);
                                 winner.setVisibility(View.VISIBLE);
                                 winnerAnimation.start();
-                            }, 2000);
+                            }, 1);
                         }
                         else{
                             spinButton.setEnabled(true);
