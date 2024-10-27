@@ -107,17 +107,17 @@ public class GameActivity extends AppCompatActivity {
                                 winBackground.setVisibility(View.VISIBLE);
                                 winCircle.setVisibility(View.VISIBLE);
                                 winCircle.startAnimation(mainCircleRotate);
-                                spinButton.setEnabled(true);
                                 winner.setVisibility(View.VISIBLE);
                                 winnerAnimation.start();
                             }, 1);
                         }
                         else{
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                spinButton.setEnabled(true);
                                 mainCircle.startAnimation(mainCircleRotate);
                             }, 1000);
-                            spinButton.setEnabled(true);
                         }
+                        spinButton.setEnabled(true);
                     }
                     @Override
                     public void onAnimationRepeat(Animation animation) {
