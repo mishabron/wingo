@@ -1,19 +1,17 @@
 package com.mbronshteyn.wingo.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -93,7 +91,6 @@ public class GameActivity extends AppCompatActivity {
                         while (randomNum == previous) {
                             randomNum = ThreadLocalRandom.current().nextInt(0, 5 + 1);
                         }
-                        previous = randomNum;
                         numbersAnimation.selectDrawable(randomNum);
                         buttonHome.setEnabled(true);
                         ImageView spingring = (ImageView) findViewById(R.id.spingring);
@@ -103,6 +100,7 @@ public class GameActivity extends AppCompatActivity {
                         chipButton50.setClickable(true);
                         mainCircleRotate.setDuration(15000);
                         if(randomNum == 5){
+                            showWinner(4);
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 winBackground.setVisibility(View.VISIBLE);
                                 winCircle.setVisibility(View.VISIBLE);
@@ -112,11 +110,13 @@ public class GameActivity extends AppCompatActivity {
                             }, 1);
                         }
                         else{
+                            showWinnerRandom();
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 spinButton.setEnabled(true);
                                 mainCircle.startAnimation(mainCircleRotate);
                             }, 1000);
                         }
+                        previous = randomNum;
                         spinButton.setEnabled(true);
                     }
                     @Override
@@ -132,6 +132,7 @@ public class GameActivity extends AppCompatActivity {
                 mainCircle.startAnimation(mainCircleRotate);
                 winnerAnimation.stop();
                 winner.setVisibility(View.INVISIBLE);
+                showWinner(0);
             }
         });
 
@@ -147,6 +148,23 @@ public class GameActivity extends AppCompatActivity {
         });
 
         scaleUi();
+    }
+
+    private void showWinnerRandom() {
+        ImageView winner = (ImageView) findViewById(R.id.winner);
+        TypedArray images = getResources().obtainTypedArray(R.array.images);
+        if(5-randomNum > 5-previous){
+            int rand = ThreadLocalRandom.current().nextInt(1, 3 + 1);
+            winner.setImageResource(images.getResourceId(rand, -1));
+        }
+        images.recycle();
+    }
+
+    private void showWinner(int i) {
+        ImageView winner = (ImageView) findViewById(R.id.winner);
+        TypedArray images = getResources().obtainTypedArray(R.array.images);
+        winner.setImageResource(images.getResourceId(i, -1));
+        images.recycle();
     }
 
     @Override
@@ -183,13 +201,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onChipStpedBlinkingEnds(String event){
-        if(event.equals(END_OD_BLINKIG)){
-            allChipsOnOff();
-        }
-    }
-
-    @Subscribe
     public void onChipStpedAnimationEnds(String event){
         if(event.equals(END_OD_ANIMATION)){
             RadioGroup chips = (RadioGroup) findViewById(R.id.radioGroup1);
@@ -201,6 +212,8 @@ public class GameActivity extends AppCompatActivity {
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     spinButton.setEnabled(true);
                     spinButton.setPressed(false);
+                    ImageView selectBet = (ImageView) findViewById(R.id.selectBet);
+                    selectBet.setVisibility(View.INVISIBLE);
                     if (checkedId == R.id.btn_chip100){
                         ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
                         win1000000.setVisibility(View.VISIBLE);
@@ -235,8 +248,10 @@ public class GameActivity extends AppCompatActivity {
         super.onResume();
         RadioGroup chips = (RadioGroup) findViewById(R.id.radioGroup1);
         chips.clearCheck();
-        chipBlinkedEvent = new ChipBlinkedEvent(chipButton100,100,400);
-        EventBus.getDefault().post(chipBlinkedEvent);
+        chipBlinkedEvent = new ChipBlinkedEvent(chipButton100,400,400);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            EventBus.getDefault().post(chipBlinkedEvent);
+        }, 400);
     }
 
     private void chipOnOff(Button chipButton, int onTime, int offTime) {
@@ -253,29 +268,15 @@ public class GameActivity extends AppCompatActivity {
                 chipBlinkedEvent.chip = chipButton25;
                 EventBus.getDefault().post(chipBlinkedEvent);
             }
-            else if(chipBlinkedEvent.chip.equals(chipButton25) && chipBlinkedEvent.counter <1) {
+            else if(chipBlinkedEvent.chip.equals(chipButton25) && chipBlinkedEvent.counter <0) {
                 chipBlinkedEvent.chip = chipButton100;
                 chipBlinkedEvent.counter ++;
                 EventBus.getDefault().post(chipBlinkedEvent);
             }
             else{
-                EventBus.getDefault().post(END_OD_BLINKIG);
+                EventBus.getDefault().post(END_OD_ANIMATION);
             }
         }, onTime+offTime);
-
-    }
-
-    private void allChipsOnOff(){
-        chipButton100.setPressed(true);
-        chipButton50.setPressed(true);
-        chipButton25.setPressed(true);
-
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            chipButton100.setPressed(false);
-            chipButton50.setPressed(false);
-            chipButton25.setPressed(false);
-            EventBus.getDefault().post(END_OD_ANIMATION);
-        }, 500);
     }
 
     public void scaleUi() {
@@ -381,6 +382,16 @@ public class GameActivity extends AppCompatActivity {
         ViewGroup.LayoutParams winBackgroundParams = winBackground.getLayoutParams();
         winBackgroundParams.height = (int) (newBmapHeight * 0.8370F);
         winBackgroundParams.width = (int) (newBmapWidth * 0.4396F);
+
+        ImageView selectBet = (ImageView) findViewById(R.id.selectBet);
+        ViewGroup.LayoutParams selectBetParams = selectBet.getLayoutParams();
+        selectBetParams.height = (int) (newBmapHeight * 0.0259F);
+        selectBetParams.width = (int) (newBmapWidth * 0.1307F);
+
+        ImageView winner = (ImageView) findViewById(R.id.winner);
+        ViewGroup.LayoutParams winnerParams = winner.getLayoutParams();
+        winnerParams.height = (int) (newBmapHeight * 0.0462F);
+        winnerParams.width = (int) (newBmapWidth * 0.1358F);
     }
 
     private class ChipBlinkedEvent {
@@ -394,8 +405,6 @@ public class GameActivity extends AppCompatActivity {
             this.delay = delay;
         }
     }
-
-    private static final String END_OD_BLINKIG = "the end of bliking";
 
     private static final String END_OD_ANIMATION = "the end of animation";
 }

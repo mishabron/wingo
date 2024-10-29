@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="images">
+        <item>@drawable/winner0</item>
+        <item>@drawable/winner1</item>
+        <item>@drawable/winner2</item>
+        <item>@drawable/winner3</item>
+        <item>@drawable/winner4</item>
+    </array>
+</resources>
