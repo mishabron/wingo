@@ -51,6 +51,8 @@ public class GameActivity extends AppCompatActivity {
         ImageView numbers = (ImageView) findViewById(R.id.numbers);
         ImageView winner = (ImageView) findViewById(R.id.winnerBanner);
         AnimationDrawable winnerAnimation = (AnimationDrawable) winner.getBackground();
+        ImageView wingo = (ImageView) findViewById(R.id.wingo);
+        Animation zoomIntAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom_in);
         spinButton.setOnClickListener(new View.OnClickListener() {
             Button buttonHome = (Button) findViewById(R.id.homeButton);
             @Override
@@ -106,6 +108,8 @@ public class GameActivity extends AppCompatActivity {
                                 winCircle.setVisibility(View.VISIBLE);
                                 winCircle.startAnimation(mainCircleRotate);
                                 winner.setVisibility(View.VISIBLE);
+                                wingo.setVisibility(View.VISIBLE);
+                                wingo.startAnimation(zoomIntAnimation);
                                 winnerAnimation.start();
                             }, 1);
                         }
@@ -132,6 +136,7 @@ public class GameActivity extends AppCompatActivity {
                 mainCircle.startAnimation(mainCircleRotate);
                 winnerAnimation.stop();
                 winner.setVisibility(View.INVISIBLE);
+                wingo.setVisibility(View.INVISIBLE);
                 showWinner(0);
             }
         });
@@ -392,6 +397,16 @@ public class GameActivity extends AppCompatActivity {
         ViewGroup.LayoutParams winnerParams = winner.getLayoutParams();
         winnerParams.height = (int) (newBmapHeight * 0.0462F);
         winnerParams.width = (int) (newBmapWidth * 0.1358F);
+
+        ImageView wingo = (ImageView) findViewById(R.id.wingo);
+        ViewGroup.LayoutParams wingoParams = wingo.getLayoutParams();
+        wingoParams.height = (int) (newBmapHeight * 0.1011F);
+        wingoParams.width = (int) (newBmapWidth * 0.2515F);
+
+        ImageView winnerBanner = (ImageView) findViewById(R.id.winnerBanner);
+        ViewGroup.LayoutParams winnerBannerParams = winnerBanner.getLayoutParams();
+        winnerBannerParams.height = (int) (newBmapHeight * 0.0740F);
+        winnerBannerParams.width = (int) (newBmapWidth * 0.2127F);
     }
 
     private class ChipBlinkedEvent {
