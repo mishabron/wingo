@@ -49,6 +49,7 @@ public class GameActivity extends AppCompatActivity {
         spinButton.setEnabled(false);
 
         ImageView numbers = (ImageView) findViewById(R.id.numbers);
+        ImageView prize = (ImageView) findViewById(R.id.prize);
         ImageView winner = (ImageView) findViewById(R.id.winnerBanner);
         AnimationDrawable winnerAnimation = (AnimationDrawable) winner.getBackground();
         ImageView wingo = (ImageView) findViewById(R.id.wingo);
@@ -60,6 +61,7 @@ public class GameActivity extends AppCompatActivity {
 
                 numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
                 AnimationDrawable numbersAnimation = (AnimationDrawable) numbers.getBackground();
+                AnimationDrawable prizeAnimation = (AnimationDrawable) prize.getBackground();
                 Animation aniRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.ring_animation);
                 ImageView mainCircle = (ImageView) findViewById(R.id.mainCircle);
                 Animation mainCircleRotate = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.maincircle_animation);
@@ -111,6 +113,8 @@ public class GameActivity extends AppCompatActivity {
                                 wingo.setVisibility(View.VISIBLE);
                                 wingo.startAnimation(zoomIntAnimation);
                                 winnerAnimation.start();
+                                prize.setVisibility(View.VISIBLE);
+                                prizeAnimation.start();
                             }, 1);
                         }
                         else{
@@ -137,6 +141,8 @@ public class GameActivity extends AppCompatActivity {
                 winnerAnimation.stop();
                 winner.setVisibility(View.INVISIBLE);
                 wingo.setVisibility(View.INVISIBLE);
+                prize.setVisibility(View.INVISIBLE);
+                prizeAnimation.stop();
                 showWinner(0);
             }
         });
@@ -395,8 +401,8 @@ public class GameActivity extends AppCompatActivity {
 
         ImageView winner = (ImageView) findViewById(R.id.winner);
         ViewGroup.LayoutParams winnerParams = winner.getLayoutParams();
-        winnerParams.height = (int) (newBmapHeight * 0.0462F);
-        winnerParams.width = (int) (newBmapWidth * 0.1358F);
+        winnerParams.height = (int) (newBmapHeight * 0.0492F);
+        winnerParams.width = (int) (newBmapWidth * 0.1458F);
 
         ImageView wingo = (ImageView) findViewById(R.id.wingo);
         ViewGroup.LayoutParams wingoParams = wingo.getLayoutParams();
@@ -407,6 +413,11 @@ public class GameActivity extends AppCompatActivity {
         ViewGroup.LayoutParams winnerBannerParams = winnerBanner.getLayoutParams();
         winnerBannerParams.height = (int) (newBmapHeight * 0.0740F);
         winnerBannerParams.width = (int) (newBmapWidth * 0.2127F);
+
+        ImageView prize = (ImageView) findViewById(R.id.prize);
+        ViewGroup.LayoutParams prizearams = prize.getLayoutParams();
+        prizearams.height = (int) (newBmapHeight * 0.1111F);
+        prizearams.width = (int) (newBmapWidth * 0.2414F);
     }
 
     private class ChipBlinkedEvent {
