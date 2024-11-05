@@ -1,9 +1,12 @@
 package com.mbronshteyn.wingo.activity;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.transition.ChangeBounds;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +20,7 @@ import androidx.core.app.ActivityOptionsCompat;
 
 import com.mbronshteyn.wingo.R;
 
-public class GameSelectorActivity extends AppCompatActivity {
+public class GameSelectorActivity extends WingoActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,14 @@ public class GameSelectorActivity extends AppCompatActivity {
         });
 
         scaleUi();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            playSound(R.raw.select_bet_spanish);
+        }, 1000);
     }
 
     public void scaleUi() {

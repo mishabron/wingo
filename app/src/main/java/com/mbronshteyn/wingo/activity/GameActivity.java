@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends WingoActivity {
 
     private Button chipButton25;
     private Button chipButton50;
@@ -58,7 +58,7 @@ public class GameActivity extends AppCompatActivity {
             Button buttonHome = (Button) findViewById(R.id.homeButton);
             @Override
             public void onClick(View v) {
-
+                playSound(R.raw.spin_sequence);
                 numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
                 AnimationDrawable numbersAnimation = (AnimationDrawable) numbers.getBackground();
                 AnimationDrawable prizeAnimation = (AnimationDrawable) prize.getBackground();
@@ -143,7 +143,6 @@ public class GameActivity extends AppCompatActivity {
                 wingo.setVisibility(View.INVISIBLE);
                 prize.setVisibility(View.INVISIBLE);
                 prizeAnimation.stop();
-                showWinner(0);
             }
         });
 
@@ -198,6 +197,11 @@ public class GameActivity extends AppCompatActivity {
         mainCircle.clearAnimation();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     @Subscribe
     public void onChipStpedBlinking(ChipBlinkedEvent event){
         if(event.chip.equals(chipButton100)){
@@ -224,6 +228,7 @@ public class GameActivity extends AppCompatActivity {
                     spinButton.setEnabled(true);
                     spinButton.setPressed(false);
                     ImageView selectBet = (ImageView) findViewById(R.id.selectBet);
+                    playSound(R.raw.select_bet_game_click);
                     selectBet.setVisibility(View.INVISIBLE);
                     if (checkedId == R.id.btn_chip100){
                         ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
@@ -257,12 +262,14 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        playInBackgroundIfNotPlaying(R.raw.background_loop);
         RadioGroup chips = (RadioGroup) findViewById(R.id.radioGroup1);
         chips.clearCheck();
         chipBlinkedEvent = new ChipBlinkedEvent(chipButton100,400,400);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             EventBus.getDefault().post(chipBlinkedEvent);
         }, 400);
+        showWinner(0);
     }
 
     private void chipOnOff(Button chipButton, int onTime, int offTime) {

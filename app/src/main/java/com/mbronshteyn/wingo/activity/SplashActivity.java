@@ -17,7 +17,7 @@ import android.widget.ImageView;
 
 import com.mbronshteyn.wingo.R;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends WingoActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +28,14 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-
+        playInBackgroundIfNotPlaying(R.raw.avatari_intro);
         super.onResume();
-
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(getApplicationContext(), GameSelectorActivity.class);
             intent.putExtras(new Bundle());
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this);
             startActivity(intent, options.toBundle());
-        }, 3000);
+        }, 11000);
     }
 
     public void scaleUi() {
