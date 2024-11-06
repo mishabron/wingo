@@ -33,6 +33,7 @@ public class GameSelectorActivity extends WingoActivity {
         button6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                stopPlaySound(R.raw.select_bet_spanish);
                 Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                 Bundle bundle = ActivityOptionsCompat.makeCustomAnimation(activity, R.anim.fade_in, R.anim.fade_out).toBundle();
                 startActivity(intent, bundle);
