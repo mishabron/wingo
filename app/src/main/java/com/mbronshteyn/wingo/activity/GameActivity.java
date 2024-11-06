@@ -105,6 +105,7 @@ public class GameActivity extends WingoActivity {
                         mainCircleRotate.setDuration(15000);
                         if(randomNum == 5){
                             showWinner(4);
+                            playSound(R.raw.wingo_sequence);
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 winBackground.setVisibility(View.VISIBLE);
                                 winCircle.setVisibility(View.VISIBLE);
@@ -114,7 +115,10 @@ public class GameActivity extends WingoActivity {
                                 wingo.startAnimation(zoomIntAnimation);
                                 winnerAnimation.start();
                                 prize.setVisibility(View.VISIBLE);
-                                prizeAnimation.start();
+                                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                    prizeAnimation.start();
+                                },300);
+
                             }, 1);
                         }
                         else{
@@ -164,6 +168,7 @@ public class GameActivity extends WingoActivity {
         ImageView winner = (ImageView) findViewById(R.id.winner);
         TypedArray images = getResources().obtainTypedArray(R.array.images);
         if(5-randomNum > 5-previous){
+            playSound(R.raw.new_winner_ping);
             int rand = ThreadLocalRandom.current().nextInt(1, 3 + 1);
             winner.setImageResource(images.getResourceId(rand, -1));
         }
@@ -229,7 +234,10 @@ public class GameActivity extends WingoActivity {
                     spinButton.setPressed(false);
                     ImageView selectBet = (ImageView) findViewById(R.id.selectBet);
                     playSound(R.raw.select_bet_game_click);
-                    selectBet.setVisibility(View.INVISIBLE);
+                    if(selectBet.getVisibility() == View.VISIBLE) {
+                        selectBet.setVisibility(View.INVISIBLE);
+                        playSound(R.raw.good_luck_spanish);
+                    }
                     if (checkedId == R.id.btn_chip100){
                         ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
                         win1000000.setVisibility(View.VISIBLE);

@@ -35,7 +35,7 @@ public class SplashActivity extends WingoActivity {
             intent.putExtras(new Bundle());
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this);
             startActivity(intent, options.toBundle());
-        }, 11000);
+        }, 4000);
     }
 
     public void scaleUi() {

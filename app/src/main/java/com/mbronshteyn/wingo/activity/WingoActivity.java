@@ -54,6 +54,8 @@ public class WingoActivity extends AppCompatActivity {
         soundMap.put(R.raw.win_count,soundId);
         soundId = soundPool.load(this, R.raw.new_winner_ping, 1);
         soundMap.put(R.raw.new_winner_ping,soundId);
+        soundId = soundPool.load(this, R.raw.wingo_sequence, 1);
+        soundMap.put(R.raw.wingo_sequence,soundId);
 
     }
 

@@ -5,32 +5,32 @@
 
     <item
         android:drawable="@drawable/prize1"
-        android:duration="250"/>
+        android:duration="350"/>
     <item
         android:drawable="@drawable/prize2"
-        android:duration="250"/>
+        android:duration="350"/>
     <item
         android:drawable="@drawable/prize3"
-        android:duration="250"/>
+        android:duration="350"/>
     <item
         android:drawable="@drawable/prize4"
-        android:duration="250"/>
+        android:duration="350"/>
     <item
         android:drawable="@drawable/prize5"
-        android:duration="250"/>
+        android:duration="350"/>
     <item
         android:drawable="@drawable/prize6"
-        android:duration="250"/>
+        android:duration="350"/>
     <item
         android:drawable="@drawable/prize7"
-        android:duration="250"/>
+        android:duration="350"/>
     <item
         android:drawable="@drawable/prize8"
-        android:duration="250"/>
+        android:duration="350"/>
     <item
         android:drawable="@drawable/prize9"
-        android:duration="250"/>
+        android:duration="350"/>
     <item
         android:drawable="@drawable/prize10"
-        android:duration="250"/>
+        android:duration="350"/>
 </animation-list>
