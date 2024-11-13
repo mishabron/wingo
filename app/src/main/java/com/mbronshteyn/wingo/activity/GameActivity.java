@@ -36,6 +36,7 @@ public class GameActivity extends WingoActivity {
     private Button spinButton;
     private int previous =6;
     private int randomNum = 6;
+    private boolean multi = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,8 @@ public class GameActivity extends WingoActivity {
             Button buttonHome = (Button) findViewById(R.id.homeButton);
             @Override
             public void onClick(View v) {
+                ImageView multiplier = (ImageView) findViewById(R.id.multiplier);
+                multiplier.setVisibility(View.INVISIBLE);
                 playSound(R.raw.spin_sequence);
                 stopPlaySound(R.raw.wingo_sequence);
                 numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
@@ -167,10 +170,22 @@ public class GameActivity extends WingoActivity {
     private void showWinnerRandom() {
         ImageView winner = (ImageView) findViewById(R.id.winner);
         TypedArray images = getResources().obtainTypedArray(R.array.images);
+        TypedArray multipliers = getResources().obtainTypedArray(R.array.multipliers);
         if(5-randomNum > 5-previous){
             playSound(R.raw.new_winner_ping);
             int rand = ThreadLocalRandom.current().nextInt(1, 3 + 1);
             winner.setImageResource(images.getResourceId(rand, -1));
+            multi = !multi;
+            if(multi){
+                ImageView multiplier = (ImageView) findViewById(R.id.multiplier);
+                if(rand==2){
+                    multiplier.setImageResource(multipliers.getResourceId(0, -1));
+                }
+                else{
+                    multiplier.setImageResource(multipliers.getResourceId(1, -1));
+                }
+                multiplier.setVisibility(View.VISIBLE);
+            }
         }
         images.recycle();
     }
@@ -434,6 +449,11 @@ public class GameActivity extends WingoActivity {
         ViewGroup.LayoutParams prizearams = prize.getLayoutParams();
         prizearams.height = (int) (newBmapHeight * 0.1111F);
         prizearams.width = (int) (newBmapWidth * 0.2414F);
+
+        ImageView multiplier = (ImageView) findViewById(R.id.multiplier);
+        ViewGroup.LayoutParams multiplierParams = multiplier.getLayoutParams();
+        multiplierParams.height = (int) (newBmapHeight * 0.0925F);
+        multiplierParams.width = (int) (newBmapWidth * 0.0503F);
     }
 
     private class ChipBlinkedEvent {

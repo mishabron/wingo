@@ -7,4 +7,8 @@
         <item>@drawable/winner3</item>
         <item>@drawable/winner4</item>
     </array>
+    <array name="multipliers">
+        <item>@drawable/x3</item>
+        <item>@drawable/x2</item>
+    </array>
 </resources>
