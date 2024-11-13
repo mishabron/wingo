@@ -59,6 +59,7 @@ public class GameActivity extends WingoActivity {
             @Override
             public void onClick(View v) {
                 playSound(R.raw.spin_sequence);
+                stopPlaySound(R.raw.wingo_sequence);
                 numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
                 AnimationDrawable numbersAnimation = (AnimationDrawable) numbers.getBackground();
                 AnimationDrawable prizeAnimation = (AnimationDrawable) prize.getBackground();
@@ -118,7 +119,6 @@ public class GameActivity extends WingoActivity {
                                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                     prizeAnimation.start();
                                 },300);
-
                             }, 1);
                         }
                         else{
@@ -126,7 +126,7 @@ public class GameActivity extends WingoActivity {
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 spinButton.setEnabled(true);
                                 mainCircle.startAnimation(mainCircleRotate);
-                            }, 1000);
+                            }, 1);
                         }
                         previous = randomNum;
                         spinButton.setEnabled(true);
@@ -223,6 +223,7 @@ public class GameActivity extends WingoActivity {
     @Subscribe
     public void onChipStpedAnimationEnds(String event){
         if(event.equals(END_OD_ANIMATION)){
+            playSound(R.raw.select_bet_spanish);
             RadioGroup chips = (RadioGroup) findViewById(R.id.radioGroup1);
             chipButton25.setClickable(true);
             chipButton100.setClickable(true);

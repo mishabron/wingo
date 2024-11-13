@@ -33,29 +33,32 @@ public class WingoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        soundPool = new SoundPool.Builder().setMaxStreams(5).build();
+        if(soundPool == null) {
 
-        //load all sounds
-        int soundId = soundPool.load(this, R.raw.background_loop, 1);
-        soundMap.put(R.raw.background_loop,soundId);
-        soundId = soundPool.load(this, R.raw.avatari_intro, 1);
-        soundMap.put(R.raw.avatari_intro,soundId);
-        soundId = soundPool.load(this, R.raw.spin_sequence, 1);
-        soundMap.put(R.raw.spin_sequence,soundId);
-        soundId = soundPool.load(this, R.raw.select_bet_spanish, 1);
-        soundMap.put(R.raw.select_bet_spanish,soundId);
-        soundId = soundPool.load(this, R.raw.select_bet_game_click, 1);
-        soundMap.put(R.raw.select_bet_game_click,soundId);
-        soundId = soundPool.load(this, R.raw.good_luck_spanish, 1);
-        soundMap.put(R.raw.good_luck_spanish,soundId);
-        soundId = soundPool.load(this, R.raw.wingo_callout, 1);
-        soundMap.put(R.raw.wingo_callout,soundId);
-        soundId = soundPool.load(this, R.raw.win_count, 1);
-        soundMap.put(R.raw.win_count,soundId);
-        soundId = soundPool.load(this, R.raw.new_winner_ping, 1);
-        soundMap.put(R.raw.new_winner_ping,soundId);
-        soundId = soundPool.load(this, R.raw.wingo_sequence, 1);
-        soundMap.put(R.raw.wingo_sequence,soundId);
+            soundPool = new SoundPool.Builder().setMaxStreams(5).build();
+
+            //load all sounds
+            int soundId = soundPool.load(this, R.raw.background_loop, 1);
+            soundMap.put(R.raw.background_loop, soundId);
+            soundId = soundPool.load(this, R.raw.avatari_intro, 1);
+            soundMap.put(R.raw.avatari_intro, soundId);
+            soundId = soundPool.load(this, R.raw.spin_sequence, 1);
+            soundMap.put(R.raw.spin_sequence, soundId);
+            soundId = soundPool.load(this, R.raw.select_bet_spanish, 1);
+            soundMap.put(R.raw.select_bet_spanish, soundId);
+            soundId = soundPool.load(this, R.raw.select_bet_game_click, 1);
+            soundMap.put(R.raw.select_bet_game_click, soundId);
+            soundId = soundPool.load(this, R.raw.good_luck_spanish, 1);
+            soundMap.put(R.raw.good_luck_spanish, soundId);
+            soundId = soundPool.load(this, R.raw.wingo_callout, 1);
+            soundMap.put(R.raw.wingo_callout, soundId);
+            soundId = soundPool.load(this, R.raw.win_count, 1);
+            soundMap.put(R.raw.win_count, soundId);
+            soundId = soundPool.load(this, R.raw.new_winner_ping, 1);
+            soundMap.put(R.raw.new_winner_ping, soundId);
+            soundId = soundPool.load(this, R.raw.wingo_sequence, 1);
+            soundMap.put(R.raw.wingo_sequence, soundId);
+        }
 
     }
 
