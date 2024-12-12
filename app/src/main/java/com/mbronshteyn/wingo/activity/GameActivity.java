@@ -59,8 +59,6 @@ public class GameActivity extends WingoActivity {
             Button buttonHome = (Button) findViewById(R.id.homeButton);
             @Override
             public void onClick(View v) {
-                ImageView multiplier = (ImageView) findViewById(R.id.multiplier);
-                multiplier.setVisibility(View.INVISIBLE);
                 playSound(R.raw.spin_sequence);
                 stopPlaySound(R.raw.wingo_sequence);
                 numbers.setBackground(getResources().getDrawable(R.drawable.numbers_animation,null));
@@ -109,6 +107,8 @@ public class GameActivity extends WingoActivity {
                         mainCircleRotate.setDuration(15000);
                         if(randomNum == 5){
                             showWinner(4);
+                            ImageView multiplier = (ImageView) findViewById(R.id.multiplier);
+                            multiplier.setVisibility(View.INVISIBLE);
                             playSound(R.raw.wingo_sequence);
                             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                 winBackground.setVisibility(View.VISIBLE);
@@ -238,7 +238,6 @@ public class GameActivity extends WingoActivity {
     @Subscribe
     public void onChipStpedAnimationEnds(String event){
         if(event.equals(END_OD_ANIMATION)){
-            playSound(R.raw.select_bet_spanish);
             RadioGroup chips = (RadioGroup) findViewById(R.id.radioGroup1);
             chipButton25.setClickable(true);
             chipButton100.setClickable(true);
@@ -287,6 +286,7 @@ public class GameActivity extends WingoActivity {
     protected void onResume() {
         super.onResume();
         playInBackgroundIfNotPlaying(R.raw.background_loop);
+        playSound(R.raw.select_bet_spanish);
         RadioGroup chips = (RadioGroup) findViewById(R.id.radioGroup1);
         chips.clearCheck();
         chipBlinkedEvent = new ChipBlinkedEvent(chipButton100,400,400);
@@ -373,8 +373,8 @@ public class GameActivity extends WingoActivity {
 
         ImageView win1000000 = (ImageView) findViewById(R.id.win1000000);
         ViewGroup.LayoutParams win1000000Params = win1000000.getLayoutParams();
-        win1000000Params.height = (int) (newBmapHeight * 0.0299F);
-        win1000000Params.width = (int) (newBmapWidth * 0.1906F);;
+        win1000000Params.height = (int) (newBmapHeight * 0.1353F);
+        win1000000Params.width = (int) (newBmapWidth * 0.0955F);;
 
         ImageView win500000 = (ImageView) findViewById(R.id.win500000);
         ViewGroup.LayoutParams win500000Params = win500000.getLayoutParams();
